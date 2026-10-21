@@ -14,6 +14,10 @@ for p in md_files:
 
 on_disk = {p.name for p in (root / "static" / "images").iterdir() if p.is_file()}
 
+# The favicon is referenced from the page head rather than from content, so
+# it is never referenced by a Markdown file.
+on_disk.discard("favicon.ico")
+
 print(f"referenced images: {len(refs)}")
 print(f"files on disk:     {len(on_disk)}")
 
