@@ -37,7 +37,7 @@ Reader: the volunteer holding registrar access and Google Workspace admin access
 
 - Windows PowerShell. This runbook uses `Resolve-DnsName`. `dig` is not installed on this machine and is not needed.
 - A web browser.
-- A plain text editor, for editing the CMS config and the SPF string.
+- A text editor, for the CMS config and the SPF string.
 - Node.js and npm, for deploying the CMS authenticator as a Cloudflare Worker in Phase 7. `node --version` should print a version. If it does not, install Node.js before starting Phase 7.
 - Python 3, if you want to run the site's own checking scripts locally before the cutover. The Cloudflare build image already includes it.
 
@@ -58,7 +58,7 @@ Do this before anything else, and keep the export.
 
 1. Log in to the d-zone.ca panel for `centretowncitizens.ca`.
 2. Export or copy the complete DNS record list, every record, including anything for subdomains.
-3. Save it somewhere outside this repository, as a plain text file.
+3. Save it somewhere outside this repository, as a text file.
 4. Diff that list against the record tables in [Phase 4](#phase-4-dns-records-in-cloudflare).
 
 The record tables in this runbook cover the web records and the email records that were verified for this domain. The zone may hold others that were not part of the verification: a Mailchimp CNAME or verification TXT for the newsletter, a Google domain-ownership TXT, a subdomain used by an old campaign, a second site. **Any record in the export that is not in the tables below must be recreated in Cloudflare.** An unrecreated record is an outage that only shows up when someone uses that part of the service.
@@ -113,7 +113,7 @@ The repository must live in an organisation the association owns, not in a volun
    git remote add origin https://github.com/centretown-cca/website.git
    git push -u origin main
    ```
-   If the site repository already has a remote, change its URL instead of adding a second one.
+   If the site repository already has a remote, change that remote's URL. Keep one remote.
 
 ### 2.3 Add the board members
 
@@ -273,8 +273,8 @@ This is step 7 of Phase 3. Do it there if you have not already.
 | Project name | `website` (gives `website.pages.dev`) |
 | Production branch | `main` |
 | Framework preset | Hugo |
-| Build command | `hugo && python tools/build_redirects.py` |
-| Preview build command | `hugo -b $CF_PAGES_URL && python tools/build_redirects.py` |
+| Build command | `python tools/build.py` |
+| Preview build command | `python tools/build.py` |
 | Build output directory | `public` |
 | Root directory | leave blank (the repository root) |
 | Environment variable `HUGO_VERSION` | `0.148.2` |
@@ -282,11 +282,13 @@ This is step 7 of Phase 3. Do it there if you have not already.
 Notes on the build settings:
 
 - `HUGO_VERSION` pins the Hugo version. The site was built and verified with Hugo 0.148.2, and pinning it means a future change to the Cloudflare build image cannot change how the site renders without someone noticing.
-- The second half of the build command is not optional. The site carries a redirect map of every one of the 286 addresses the old Squarespace site published, and `tools/build_redirects.py` generates it into `public/_redirects` by reading the built HTML. Cloudflare Pages clears the output directory before each build and then reads `_redirects` from the root of that directory, so a build command of plain `hugo` publishes the site with no redirect map at all, and every old address returns a 404 instead of a 301. The script uses only the Python standard library, and the Cloudflare build image includes Python 3. If the script ever fails, the build fails, and the previous deployment stays live rather than going live without redirects.
-- Cloudflare Pages allows 2,000 static redirects per `_redirects` file. The current map has 286 rules, so there is room, and the script refuses to write a file that would exceed the limit.
-- The production canonical URL comes from `baseURL` in `hugo.toml`, which is `https://www.centretowncitizens.ca/`. The plain `hugo` build command leaves that alone, so the production site always declares the production domain as its canonical URL.
-- The preview build command sets the base URL to the deployment's own URL. Without it, a preview build emits canonical tags pointing at the production domain, which tells search engines that the preview is the real site. If your dashboard does not show a separate preview build command field, set the single build command to `hugo -b $CF_PAGES_URL && python tools/build_redirects.py` for both production and preview. In that case the production canonical comes from `$CF_PAGES_URL` as well, which is the custom domain once the domain is attached. If the built HTML shows `website.pages.dev` as the canonical, the custom domain was not attached when the build ran: attach it and trigger a new production deployment.
-- `public` is the output directory. The repository also contains a committed `public` directory from local builds. That is harmless, because the build regenerates it. If a stale local build ever appears to win, remove the committed copy before the first deployment.
+- The build command runs `tools/build.py`, which runs Hugo and then finalises the redirect map. The map is not optional. The site carries a redirect for every one of the 286 addresses the old Squarespace site published, and Cloudflare Pages clears the output directory before each build and then reads `_redirects` from the root of that directory. A build that skipped the redirect map would publish the site with every old address returning a 404 instead of a 301, and links from council documents, press coverage and social media would break.
+- The redirect map is produced by Hugo itself, from `data/redirects.yaml`, which the export writes. The build renders it as `public/_redirects.txt` and `tools/build.py` renames that to `public/_redirects`, which is the name Cloudflare expects. If the map is missing, `tools/build.py` fails the build, so the previous deployment stays live, and the site never goes live without redirects.
+- `tools/build_redirects.py` and `tools/check_coverage.py` are the verification side of this. They read the built output and confirm that every redirect points at a page that was actually built. They are not part of the build command and do not need to run on Cloudflare, but running them locally before a cutover is a worthwhile check.
+- Cloudflare Pages allows 2,000 static redirects per `_redirects` file. The current map has 286 rules, so there is room, and the export refuses to write a file that would exceed the limit.
+- The production canonical URL comes from `baseURL` in `hugo.toml`, which is `https://www.centretowncitizens.ca/`. The script leaves that alone unless `CF_PAGES_URL` is set, so the production site always declares the production domain as its canonical URL.
+- Cloudflare sets `CF_PAGES_URL` for every build. The script passes it to Hugo as the base URL, so a preview deployment does not emit canonical tags pointing at the production domain, which would tell search engines that the preview is the real site. In a preview build the canonical therefore points at the preview's own URL, which is correct.
+- `public` is the output directory. It is also listed in `.gitignore`, so the build output from a local run is never committed. The build regenerates it either way.
 
 ### 5.3 Deploy and check the preview URL
 
@@ -352,7 +354,7 @@ Resolve-DnsName -Name centretowncitizens.ca -Type NS -Server 1.1.1.1
 
 Expect two records ending in `.ns.cloudflare.com`. Until that happens, the domain is still being served by d-zone and the old site is still live, which is a safe state.
 
-Check every ten minutes, not every thirty seconds. When the NS lookup shows Cloudflare, the switch has happened.
+Check every ten minutes. Thirty seconds is too often. When the NS lookup shows Cloudflare, the switch has happened.
 
 ### 6.4 Check mail first, before the website
 
@@ -424,7 +426,7 @@ Each command prompts for the value and encrypts it before storing it. The equiva
 
 In the GitHub OAuth app, open **Permissions and scopes**. Give the app read and write access to repository contents. Add workflow access only if you later want CMS edits to trigger GitHub Actions workflows.
 
-Be clear about what this scope means: an OAuth app with the `repo` scope can reach every private repository the signing-in user can reach, not only the content repository. That is why the organisation should contain only the site repositories, and why every editor's GitHub account should have write access to `website` and little else.
+Be clear about what this scope means: an OAuth app with the `repo` scope can reach every private repository the signing-in user can reach, and not only the content repository. That is why the organisation should contain only the site repositories, and why every editor's GitHub account should have write access to `website` and little else.
 
 **Step 5: point the CMS at the worker**
 
@@ -436,7 +438,7 @@ Open `https://www.centretowncitizens.ca/admin`, sign in with GitHub, and confirm
 
 ### 7.3 Route 2: Netlify as the OAuth client
 
-Netlify can act as the OAuth client instead of running a worker. This needs no server of the association's own, which is its whole appeal.
+Netlify can act as the OAuth client, with no worker of your own to run. This needs no server of the association's own, which is its whole appeal.
 
 The tradeoffs: it needs a Netlify account and a Netlify site for the association, Netlify holds the OAuth client credentials, and Netlify has to stay alive for editors to sign in. You also add a second hosting account to the setup, which is the opposite of the goal of this migration.
 
@@ -448,7 +450,7 @@ One value in this runbook must be read from the documentation rather than copied
 
 The fallback is that each editor creates a GitHub personal access token with write access to the `website` repository and pastes it into the Sveltia sign-in screen.
 
-This is the worst option for non-technical volunteers, and it should be described as such to the board rather than offered quietly:
+This is the worst option for non-technical volunteers, and the board should hear that plainly:
 
 - The token is a password. It can be used by anyone who obtains it, to write to every repository the person can write to, until it is revoked.
 - Tokens expire, and a token that expires silently stops the editor from publishing, usually discovered by a board member who notices a news post that never appeared.
@@ -460,7 +462,7 @@ Use this only if the worker deploy fails and there is no time to fix it.
 ### 7.5 What every editor needs, in all routes
 
 - A GitHub account with two-factor authentication enabled.
-- Write access to `centretown-cca/website`. Sveltia will not let a user sign in at all without write access to the content repository, and the sign-in fails with a permissions error rather than a helpful message.
+- Write access to `centretown-cca/website`. Sveltia will not let a user sign in at all without write access to the content repository, and the sign-in fails with a permissions error in place of a helpful message.
 
 ---
 
@@ -595,7 +597,7 @@ Then open the site in a browser and confirm there is no certificate warning and 
 
 ## Phase 9: Rollback
 
-The old Squarespace site stays live and untouched until the board signs off, so the fallback is a DNS change, not a rebuild. Two levels.
+The old Squarespace site stays live and untouched until the board signs off, so the fallback is a DNS change. No rebuild is needed. Two levels.
 
 ### 9.1 When to roll back
 
@@ -666,7 +668,7 @@ Expect the four d-zone nameservers and the five Google MX records.
 ### 9.4 After a rollback
 
 - The Cloudflare Pages project keeps deploying. Nothing needs undoing in the repository.
-- Leave the GitHub organisation, the repository and the CMS in place. The next attempt is a Phase 4 retry, not a rebuild.
+- Leave the GitHub organisation, the repository and the CMS in place. The next attempt is a Phase 4 retry, and no rebuild is needed.
 - Write down what went wrong and what the DNS looked like at the time, while you still remember.
 - Check whether the Squarespace subscription is still active. A lapsed Squarespace account stops serving the site even with correct DNS.
 
@@ -742,14 +744,16 @@ Notes:
 
 GitHub Pages does not run a Hugo build by itself. It serves the static files that are already in the publishing folder. Two ways to fill that folder:
 
-1. **GitHub Actions (recommended).** Add a workflow to the repository that checks out `main`, installs Hugo 0.148.2, runs `hugo`, runs `python tools/build_redirects.py`, and uploads the `public` directory to the `gh-pages` branch. Point **Settings** → **Pages** at the `gh-pages` branch. This is the standard path, it builds on every push, and it gives the editors a preview without any local work.
-2. **Commit the built `public` directory.** The repository already contains a committed `public` directory, so set **Settings** → **Pages** to deploy from `main` with the folder `/public`. This works with no workflow at all, but it means someone has to build the site on their own machine and commit the result every time something changes, which is exactly the work the CMS is meant to remove. Use it only as a temporary measure while the workflow is being written.
+1. **GitHub Actions (recommended).** Add a workflow to the repository that checks out `main`, installs Hugo 0.148.2, runs `python tools/build.py`, and uploads the `public` directory to the `gh-pages` branch. Point **Settings** → **Pages** at the `gh-pages` branch. This is the standard path, it builds on every push, and it gives the editors a preview without any local work.
+2. **Commit the built `public` directory.** Set **Settings** → **Pages** to deploy from `main` with the folder `/public`. This works with no workflow at all, but it means someone has to build the site on their own machine and commit the result every time something changes, which is exactly the work the CMS is meant to remove. Use it only as a temporary measure while the workflow is being written.
 
-Whichever you choose, keep `HUGO_VERSION` pinned to `0.148.2` in the build environment. If you keep preview deployments, build them with `hugo -b $CF_PAGES_URL` so a preview does not claim the production domain as its canonical URL.
+Whichever you choose, keep `HUGO_VERSION` pinned to `0.148.2` in the build environment. If you keep preview deployments, build them with `python tools/build.py`, which passes Cloudflare's `CF_PAGES_URL` to Hugo so a preview does not claim the production domain as its canonical URL.
+
+Note that `public` is listed in `.gitignore`, so option 2 needs that line removed, or the built output force-added with `git add -f`.
 
 ### The redirect map on GitHub Pages
 
-GitHub Pages does not read the `_redirects` file that `tools/build_redirects.py` produces. That file format is a Cloudflare Pages and Netlify convention. On GitHub Pages, an unknown address returns the site's `404.html` with an HTTP 404 status, not a 301 to the new page.
+GitHub Pages does not read the `_redirects` file that the build produces. That file format is a Cloudflare Pages and Netlify convention. On GitHub Pages, an unknown address returns the site's `404.html` with an HTTP 404 status, not a 301 to the new page.
 
 Two ways to handle the 286 old Squarespace addresses, in order of preference:
 
@@ -793,7 +797,7 @@ The `+a` term authorises the A record of the domain itself, so today it authoris
 Two properties of the new string to know:
 
 - It stays well inside the limit of ten DNS lookups per SPF evaluation. `include:_spf.google.com` expands to Google's mail hosts, `+mx` adds one lookup for the MX hosts, and `ip4:` adds none.
-- `~all` stays as it is. Do not change it to `-all` in the same edit. `-all` tells receiving servers to reject any mail from a host not listed, and if one legitimate sender is missing from the list, its mail is refused outright rather than junked.
+- `~all` stays as it is. Do not change it to `-all` in the same edit. `-all` tells receiving servers to reject any mail from a host not listed, and if one legitimate sender is missing from the list, its mail is refused outright. A host that is merely missing from the list ends up in the spam folder, which is recoverable. A refusal is not.
 
 ### The `50.28.38.88` decision
 

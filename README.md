@@ -55,7 +55,6 @@ centretown-cca-site/
 │   └── baseof.html        the shared shell: header, navigation, footer
 ├── public/                the built output. Not committed, regenerated on every build
 ├── resources/             Hugo's generated assets. Not committed
-├── scripts/               deployment helper scripts
 ├── static/
 │   ├── admin/             the CMS: index.html and config.yml
 │   ├── css/style.css      the stylesheet
@@ -138,13 +137,24 @@ All the scripts are Python 3 and live in `tools/`. Run them from the repository 
 
 | Script | What it does |
 | --- | --- |
+| `build.py` | The build. Runs Hugo and finalises the Cloudflare Pages `_redirects` file |
 | `export_squarespace.py` | Pulls the content out of the old Squarespace site |
-| `build_redirects.py` | Turns the built site into the Cloudflare Pages `_redirects` file |
+| `build_redirects.py` | Rebuilds the `_redirects` file from the built output, for verification |
 | `check_coverage.py` | Verifies the redirect map covers the old site completely |
 | `check_site.py` | Crawls the built site for broken internal links and missing images |
 | `audit_images.py` | Checks that every image referenced in content exists on disk |
 
-There are also `tools/check_redirects.py`, a narrower version of the coverage check, and a set of `tools/probe*.py` scripts left over from working out how the old site's JSON endpoint behaves. They are kept because they are useful if the export ever needs to be repeated.
+### build.py
+
+This is the build command for Cloudflare Pages, and the one to run locally.
+
+```powershell
+python tools\build.py --hugo "C:\Users\shawl\bin\hugo.exe"
+```
+
+It runs Hugo, then renames the redirect map that Hugo rendered from `public/_redirects.txt` to `public/_redirects`, which is the name Cloudflare expects. If the map is missing, the script fails the build rather than publishing a site where every old address returns a 404.
+
+It reads `CF_PAGES_URL` from the environment and passes it to Hugo as the base URL, so a preview deployment does not claim the production domain as its canonical URL. Cloudflare sets that variable on every build.
 
 ### export_squarespace.py
 
@@ -168,15 +178,16 @@ Useful flags:
 It writes:
 
 - `content/<section>/<slug>.md`, the Hugo content with YAML frontmatter
-- `data/redirects.csv`, the old path mapped to the new one
-- `data/inventory.csv`, every source URL with its destination and status
+- `data/redirects.yaml`, the old path mapped to the new one, which the Hugo build reads
+- `data-raw/redirects.csv`, the same map as CSV, for the check scripts
+- `data-raw/inventory.csv`, every source URL with its destination and status
 - `static/images/`, the downloaded images, renamed by content token
 - `static/files/`, the by-laws PDF and other files the old site served directly
 - `static/images/favicon.ico`, the site icon
 
 ### build_redirects.py
 
-This is how the redirect map is made, and it is the reason the map is correct rather than merely plausible.
+Rebuilds the `_redirects` file from the built output, for verification, and the build does not depend on it.
 
 Rather than predicting what URL Hugo will produce, the script reads the built HTML in `public/` and finds the `legacy-url` meta tag that each page carries. That tag holds the old Squarespace address. The script pairs it with the path the page was actually built at, so the map is right by construction even when a slug contains characters Hugo rewrites.
 
@@ -184,7 +195,9 @@ Rather than predicting what URL Hugo will produce, the script reads the built HT
 python tools\build_redirects.py
 ```
 
-Defaults are `--public public`, `--inventory data/inventory.csv` and `--out public/_redirects`. It refuses to write a file with more than 2,000 redirects, which is the Cloudflare Pages limit.
+Defaults are `--public public`, `--inventory data-raw/inventory.csv` and `--out public/_redirects`. It refuses to write a file with more than 2,000 redirects, which is the Cloudflare Pages limit.
+
+The build does not depend on this script. The redirect map the build publishes comes from `data/redirects.yaml` by way of Hugo's own template, so it is always present. This script exists to confirm the two agree.
 
 ### check_coverage.py
 
@@ -231,16 +244,13 @@ Hugo is at `C:\Users\shawl\bin\hugo.exe` on the machine this was built on. Every
 ```powershell
 cd C:\Users\shawl\source\repos\centretown-cca-site
 
-# 1. Build the site into public/
-C:\Users\shawl\bin\hugo.exe --minify
+# 1. Build the site into public/, and finalise the redirect map
+python tools\build.py --hugo "C:\Users\shawl\bin\hugo.exe"
 
-# 2. Rebuild the redirect map from what was just built
-python tools\build_redirects.py
-
-# 3. Confirm the map covers the old site and every target exists
+# 2. Confirm the map covers the old site and every target exists
 python tools\check_coverage.py
 
-# 4. Confirm every image referenced in content is on disk
+# 3. Confirm every image referenced in content is on disk
 python tools\audit_images.py
 ```
 
@@ -248,7 +258,7 @@ Then, in a second terminal, start a server and crawl it:
 
 ```powershell
 cd C:\Users\shawl\source\repos\centretown-cca-site
-C:\Users\shawl\bin\hugo.exe server --port 8811 --disableFastRender
+python -m http.server 8811 --bind 127.0.0.1 --directory public
 ```
 
 ```powershell
@@ -267,14 +277,14 @@ git push origin main
 
 Cloudflare Pages builds on the push and publishes the result, which takes about a minute.
 
-`public/` and `resources/` are build output. They should not be committed. Add them to `.gitignore` if that file is missing.
+`public/` and `resources/` are build output. They are already listed in `.gitignore` and should stay that way.
 
 ### Cloudflare Pages settings
 
-The Pages project should build with Hugo and publish the `public` directory. The build command has to include the redirect step, because the redirect file is generated from the built HTML and the built HTML is not committed:
+The Pages project should build with Hugo and publish the `public` directory. The build command runs the build script, which builds the site and finalises the redirect map:
 
 ```
-hugo --minify && python tools/build_redirects.py
+python tools/build.py
 ```
 
 If the build image provides Python as `python3` rather than `python`, use that name instead. Check the build log if the redirect file is missing from a deployment.
@@ -348,4 +358,4 @@ Two things to know:
 
 The old Squarespace site stays online until the board signs off on the new one. Both are reachable during the handover.
 
-The association's email address and its domain registration are not affected by this repository. They live with the provider that manages them, not with the website code. The handover of those, and the order the two must be done in, is written up in [docs/Cutover Runbook.md](<docs/Cutover Runbook.md>), which is worth reading before any change to the domain's nameservers.
+The association's email address and its domain registration are not affected by this repository. They live with the provider that manages them, and have nothing to do with the website code. The handover of those, and the order the two must be done in, is written up in [docs/Cutover Runbook.md](<docs/Cutover Runbook.md>), which is worth reading before any change to the domain's nameservers.

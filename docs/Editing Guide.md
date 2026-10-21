@@ -84,7 +84,7 @@ News items are short announcements: a meeting, a poster, a milestone, an obituar
 
 ### On formatting
 
-The editor's toolbar does bold, italic, headings and links for you. Type plain text in between. Do not paste text from Word, Google Docs or an email. Those programs carry hidden formatting that breaks pages. If you do paste something, paste it as plain text first, and then use the toolbar to add bold or headings.
+The editor's toolbar does bold, italic, headings and links for you. Type ordinary text in between. Do not paste text from Word, Google Docs or an email. Those programs carry hidden formatting that breaks pages. If you do paste something, paste it as ordinary text first, and then use the toolbar to add bold or headings.
 
 ## Posting an advocacy letter or statement
 
@@ -112,25 +112,11 @@ The committee you pick decides how the item is labelled and filtered. Visitors o
 
 Always pick from the dropdown. Do not type your own wording into the box. The filter matches the exact words in the dropdown, so "Housing" will not match "Housing Affordability", and "Greenspace" will not match "Greenspace & Sustainability".
 
-### One committee at a time
+### More than one committee
 
-The dropdown is currently set up to accept a single choice. Picking more than one is not yet supported in the form. If a letter genuinely belongs to two committees, choose the one that fits best and tell the maintainer, who can add the second label to the file for you.
+The dropdown lets you pick several committees, so a letter that concerns more than one can be labelled with all of them. Hold the control key while you pick the second one, or use the same key your keyboard uses for multiple selections.
 
-The site itself is able to carry more than one committee on an item. It is the form that limits it to one at the moment.
-
-### A known problem with the Committee box
-
-There is a problem with the `Committee` dropdown at the moment, and you should know about it before you use it.
-
-When you choose a committee, the editor saves that choice in a slightly different form from the older files on the site. The site build then stops with an error, which means nothing new goes live, including changes that have nothing to do with your item.
-
-What to do:
-
-1. Publish the item as normal, choosing the committee.
-2. Email the website maintainer straight away and say that you chose a committee, and which one.
-3. The maintainer can correct the file in a couple of minutes and the site will build again.
-
-If you would rather your item go live straight away, leave the `Committee` box empty, publish, and tell the maintainer which committee it belongs to. They can add it afterwards.
+The site itself has always been able to carry more than one committee on an item, and the form now matches that.
 
 ## Posting an event
 
@@ -156,6 +142,24 @@ This is the part that catches people out, so read it twice.
 - An event with no `Starts` date will not appear in either list. The start date is what the site sorts on, so an event without one is invisible.
 
 Always check the date before you publish. If an event you expected to see is missing, the start date is the first thing to look at. Also check that you have not set a start time of 12:00 AM by accident, which will sort it into the past.
+
+## Posting a committee's own news
+
+Each committee has its own section of the site with its own list of posts: Heritage, Housing Affordability, Planning, Transportation, Trees and Greenspace, Safety and Emergency Preparedness (SEPAW), and Seniors.
+
+To add a post to one of these:
+
+1. Click `Committees` in the list on the left.
+2. Click the `Add Committees` button, or the `+` button.
+3. Choose the committee's folder, for example `heritage`, and click `Add`.
+4. Fill in `Title`. The name of the report, letter or announcement.
+5. Fill in `Date`. The date it was written or published.
+6. Fill in `Author`, if you want to be credited. Optional.
+7. Fill in `Summary`. One or two sentences. Optional.
+8. Fill in `Body`. The full text, or a summary with a link to a PDF.
+9. Click `Publish`.
+
+The post appears on that committee's page, under its own heading. Committee pages also carry a short description of what the committee does, which the maintainer sets. If the description is out of date, mention it to the maintainer.
 
 ## Editing a standing page
 
@@ -231,10 +235,10 @@ If something is wrong on the live site and it is not urgent, leave it and let th
 
 ## Things to be careful about
 
-- Use the `Committee` dropdown rather than typing your own wording. The filter matches the dropdown words exactly.
+- Use the `Committee` dropdown, and leave the wording to it. The filter matches the dropdown words exactly.
 - Check the `Starts` date on every event before you publish. It decides whether the event shows as upcoming or in the past archive.
 - Do not delete a post you did not create without asking first.
-- Do not paste formatting from a word processor. Paste as plain text and use the Markdown toolbar instead.
+- Do not paste formatting from a word processor. Paste as ordinary text and use the Markdown toolbar instead.
 - Keep images under about 1 MB, so the site loads quickly on phones.
 - Write summaries that make sense on their own. People often see the summary before the full text, in a link preview or in a search result.
 - Be careful with the `Title` of something already published, because it can change the address of the page.
