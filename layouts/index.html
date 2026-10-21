@@ -1,0 +1,69 @@
+{{ define "main" }}
+{{ if .IsHome }}
+<div class="hero">
+  <div class="wrap hero-inner">
+    <h1>{{ site.Title }}</h1>
+    <p class="hero-tagline">{{ site.Params.description }}</p>
+    <p><a class="button" href="{{ "/get-involved/" | relURL }}">Join the Community</a></p>
+  </div>
+</div>
+
+{{ .Content }}
+
+<section class="section">
+  <div class="wrap">
+    <h2>Upcoming Events</h2>
+    {{ $upcoming := where (where site.RegularPages "Section" "events") "Params.start" "ge" now }}
+    {{ if $upcoming }}
+    <ul class="card-list">
+      {{ range first 6 $upcoming }}
+      <li class="card">
+        <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+        <p class="card-meta">
+          <time datetime="{{ .Params.start }}">{{ time.Format "January 2, 2006" (time .Params.start) }}</time>
+          {{ with .Params.location }} &middot; {{ . }}{{ end }}
+        </p>
+      </li>
+      {{ end }}
+    </ul>
+    {{ else }}
+    <p>No upcoming events are scheduled. <a href="{{ "/events/" | relURL }}">See past events</a>.</p>
+    {{ end }}
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <h2>Latest Advocacy</h2>
+    {{ $posts := first 4 (where site.RegularPages "Section" "advocacy") }}
+    <ul class="card-list">
+      {{ range $posts }}
+      <li class="card">
+        <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+        <p class="card-meta"><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time></p>
+        {{ partial "tags.html" .Params.categories }}
+      </li>
+      {{ end }}
+    </ul>
+    <p><a href="{{ "/advocacy/" | relURL }}">All advocacy</a></p>
+  </div>
+</section>
+
+{{ else }}
+<div class="wrap page-wrap">
+  <h1>{{ .Title }}</h1>
+  {{ if .Content }}<article class="prose">{{ .Content }}</article>{{ end }}
+  {{ $pages := .RegularPages }}
+  {{ if $pages }}
+  <ul class="card-list">
+    {{ range $pages }}
+    <li class="card">
+      <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+      <p class="card-meta"><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time></p>
+    </li>
+    {{ end }}
+  </ul>
+  {{ end }}
+</div>
+{{ end }}
+{{ end }}

@@ -1,0 +1,16 @@
+{{ define "main" }}
+<div class="wrap page-wrap">
+  <article class="prose">
+    <p class="post-meta">
+      <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time>
+      {{ with .Params.author }} &middot; {{ . }}{{ end }}
+      {{ with .Params.categories }} &middot; {{ range . }}<span class="tag">{{ . }}</span> {{ end }}{{ end }}
+    </p>
+    <h1>{{ .Title }}</h1>
+    {{ .Content }}
+    {{ if .Params.legacy_url }}
+    <p class="post-legacy"><small>Originally published at <code>{{ .Params.legacy_url }}</code></small></p>
+    {{ end }}
+  </article>
+</div>
+{{ end }}

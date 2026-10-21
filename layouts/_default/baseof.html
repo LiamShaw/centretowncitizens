@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ if .IsHome }}{{ site.Title }}{{ else }}{{ .Title }} | {{ site.Title }}{{ end }}</title>
+  <meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ site.Params.description }}{{ end }}">
+  <link rel="canonical" href="{{ .Permalink }}">
+  {{ with .Params.legacy_url }}<meta name="legacy-url" content="{{ replace . " " "%20" }}">{{ end }}  <link rel="stylesheet" href="{{ "css/style.css" | relURL }}">
+  <link rel="icon" href="{{ "images/favicon.ico" | relURL }}" type="image/x-icon">
+  {{ with .OutputFormats.Get "rss" }}<link rel="alternate" type="application/rss+xml" href="{{ .Permalink }}" title="{{ site.Title }}">{{ end }}
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to Content</a>
+
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="{{ "/" | relURL }}">
+        <img src="{{ "images/CCALogo_EN_FullName_Colour-1619899849350.png" | relURL }}"
+             alt="Centretown Community Association" width="220" height="60">
+      </a>
+      <button class="nav-toggle" aria-expanded="false" aria-controls="primary-nav">
+        <span class="nav-toggle-label">Menu</span>
+        <span class="nav-toggle-bars" aria-hidden="true"></span>
+      </button>
+      <nav id="primary-nav" class="primary-nav" aria-label="Primary">
+        <ul>
+          {{ range .Site.Menus.main }}
+          <li><a href="{{ .URL }}">{{ .Name }}</a></li>
+          {{ end }}
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    {{ block "main" . }}{{ end }}
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-grid">
+      <div class="footer-block">
+        <p class="footer-contact">
+          <a href="mailto:{{ site.Params.email }}">{{ site.Params.email }}</a><br>
+          {{ site.Params.address }}
+        </p>
+        <p class="footer-social">
+          <a href="https://twitter.com/{{ site.Params.twitter }}" rel="noopener">Twitter</a>
+          <a href="{{ site.Params.facebook }}" rel="noopener">Facebook</a>
+        </p>
+      </div>
+
+      <div class="footer-block">
+        <h2>Committees</h2>
+        <ul class="footer-links">
+          {{ range .Site.Menus.committees }}
+          <li><a href="{{ .URL }}">{{ .Name }}</a></li>
+          {{ end }}
+        </ul>
+      </div>
+
+      <div class="footer-block">
+        <h2>Get Involved</h2>
+        <ul class="footer-links">
+          {{ range .Site.Menus.getinvolved }}
+          <li><a href="{{ .URL }}">{{ .Name }}</a></li>
+          {{ end }}
+        </ul>
+      </div>
+
+      {{ if site.Params.newsletter_enabled }}
+      <div class="footer-block">
+        <h2>Stay in touch</h2>
+        <p>Sign up with your email address to receive news and updates.</p>
+        <form class="newsletter-form" action="/thanks/" method="post" name="newsletter">
+          <label class="visually-hidden" for="newsletter-email">Email address</label>
+          <input id="newsletter-email" type="email" name="email" placeholder="Email address" required>
+          <button type="submit">Sign Up</button>
+        </form>
+      </div>
+      {{ end }}
+    </div>
+  </footer>
+
+  <script src="{{ "js/nav.js" | relURL }}" defer></script>
+  {{ block "scripts" . }}{{ end }}
+</body>
+</html>

@@ -1,0 +1,16 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Claude//Ottawa 200 Walking Tour//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:ottawa-200-walking-tour-20260927@claude
+DTSTAMP:20260819T000000Z
+DTSTART;TZID=America/Toronto:20260927T103000
+DTEND;TZID=America/Toronto:20260927T120000
+SUMMARY:Ottawa 200 Walking Tour
+LOCATION:Colonel John By Statue
+DESCRIPTION:Website: https://www.centretowncitizens.ca/events/ottawa-200-tour-964jd-9zmxt-wfghx
+URL:https://www.centretowncitizens.ca/events/ottawa-200-tour-964jd-9zmxt-wfghx
+END:VEVENT
+END:VCALENDAR

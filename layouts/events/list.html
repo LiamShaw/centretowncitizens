@@ -1,0 +1,44 @@
+{{ define "main" }}
+{{ $pages := .RegularPages }}
+{{ $now := now }}
+{{ $upcoming := where $pages "Date" "ge" $now }}
+{{ $past := where $pages "Date" "lt" $now }}
+
+<div class="wrap page-wrap">
+  <h1>{{ .Title }}</h1>
+  {{ if .Content }}<article class="prose">{{ .Content }}</article>{{ end }}
+
+  {{ if $upcoming }}
+  <h2>Upcoming Events</h2>
+  <ul class="card-list">
+    {{ range $upcoming }}
+    <li class="card">
+      <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+      <p class="card-meta">
+        <time datetime="{{ .Params.start }}">{{ time.Format "Monday, January 2, 2006" (time .Params.start) }}</time>
+        {{ with .Params.end }} &ndash; {{ time.Format "3:04 PM" (time .) }}{{ end }}
+        {{ with .Params.location }} &middot; {{ . }}{{ end }}
+      </p>
+    </li>
+    {{ end }}
+  </ul>
+  {{ else }}
+  <h2>Upcoming Events</h2>
+  <p>No upcoming events are scheduled.</p>
+  {{ end }}
+
+  <h2>Past Events</h2>
+  {{ if $past }}
+  <ul class="card-list card-list-compact">
+    {{ range $past.ByDate.Reverse }}
+    <li class="card">
+      <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+      <p class="card-meta"><time datetime="{{ .Params.start }}">{{ time.Format "January 2, 2006" (time .Params.start) }}</time></p>
+    </li>
+    {{ end }}
+  </ul>
+  {{ else }}
+  <p>No past events.</p>
+  {{ end }}
+</div>
+{{ end }}

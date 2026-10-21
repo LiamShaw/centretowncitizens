@@ -1,0 +1,40 @@
+{{ define "main" }}
+<div class="wrap page-wrap">
+  <h1>{{ .Title }}</h1>
+  {{ if .Content }}<article class="prose">{{ .Content }}</article>{{ end }}
+
+  {{ $pages := .RegularPages }}
+  {{ if .Params.categories }}
+  <div class="filter-bar" data-filter-target="posts">
+    <span class="filter-label">Filter by committee</span>
+    <a class="filter-chip is-active" href="{{ .RelPermalink }}">All</a>
+    {{ range .Params.categories }}
+    <a class="filter-chip" href="{{ $.RelPermalink }}?category={{ urlquery . }}">{{ . }}</a>
+    {{ end }}
+  </div>
+  {{ end }}
+
+  {{ if $pages }}
+  <ul class="card-list" id="posts">
+    {{ range $pages }}
+    <li class="card"{{ with .Params.categories }} data-categories="{{ delimit . "|" }}"{{ end }}>
+      <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+      <p class="card-meta">
+        <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time>
+        {{ with .Params.author }} &middot; {{ . }}{{ end }}
+      </p>
+      {{ partial "tags.html" .Params.categories }}      {{ with .Description }}<p class="card-summary">{{ . }}</p>{{ end }}
+    </li>
+    {{ end }}
+  </ul>
+  {{ else }}
+  <p>Nothing published here yet.</p>
+  {{ end }}
+</div>
+{{ end }}
+
+{{ define "scripts" }}
+{{ if .Params.categories }}
+<script src="{{ "js/filter.js" | relURL }}" defer></script>
+{{ end }}
+{{ end }}

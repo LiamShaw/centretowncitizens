@@ -1,0 +1,169 @@
+baseURL = "https://www.centretowncitizens.ca/"
+languageCode = "en-CA"
+title = "Centretown Community Association"
+enableGitInfo = false
+enableRobotsTXT = true
+
+# The homepage is a static page exported from Squarespace.
+[params]
+description = "Working for and with everyone who lives, works and plays in Centretown."
+email = "ccca@centretowncitizens.ca"
+address = "101-210 Gloucester Street, Ottawa, ON K2P 2K4"
+twitter = "CentretownCCA"
+facebook = "https://www.facebook.com/CentretownCCA/"
+# The newsletter form is wired up in a later step. Until then the form is
+# hidden rather than shown collecting addresses it cannot store.
+newsletter_enabled = false
+
+[permalinks]
+# The explicit slug in each file's front matter preserves the exact Squarespace
+# URL, so the redirect map and the published paths line up.
+news = "/news/:slug/"
+advocacy = "/advocacy/:slug/"
+events = "/events/:slug/"
+# Committee pages keep Hugo's default path, so a post sits at
+# /committees/heritage/slug/ beside its committee's landing page.
+[taxonomies]
+category = "categories"
+
+# The Cloudflare Pages redirect map is rendered during the build, so it can
+# never be left out of a deployment. Cloudflare expects a file named
+# _redirects at the root of the published site.
+[mediaTypes."text/redirects"]
+suffixes = ["txt"]
+
+[outputFormats.redirects]
+mediaType = "text/redirects"
+baseName = "_redirects"
+isPlainText = true
+notAlternative = true
+
+[outputs]
+home = ["HTML", "RSS", "redirects"]
+
+[menus]
+[[menus.main]]
+name = "Newsletter"
+pageRef = "/newsletter"
+weight = 10
+
+[[menus.main]]
+name = "News"
+pageRef = "/news"
+weight = 20
+
+[[menus.main]]
+name = "Advocacy"
+pageRef = "/advocacy"
+weight = 30
+
+[[menus.main]]
+name = "Media Mentions"
+pageRef = "/media-mentions"
+weight = 40
+
+[[menus.main]]
+name = "Committees"
+pageRef = "/committees"
+weight = 50
+
+[[menus.main]]
+name = "Events"
+pageRef = "/events"
+weight = 60
+
+[[menus.main]]
+name = "Get Involved"
+pageRef = "/get-involved"
+weight = 70
+
+[[menus.main]]
+name = "About CCA"
+pageRef = "/about"
+weight = 80
+
+[[menus.main]]
+name = "Board Members"
+pageRef = "/board"
+weight = 90
+
+[[menus.main]]
+name = "Editorial Guidelines"
+pageRef = "/editorial"
+weight = 100
+
+[[menus.main]]
+name = "Contact"
+pageRef = "/contact"
+weight = 110
+
+[[menus.committees]]
+name = "Committees Overview"
+pageRef = "/committees"
+weight = 10
+
+[[menus.committees]]
+name = "Heritage"
+pageRef = "/committees/heritage"
+weight = 20
+
+[[menus.committees]]
+name = "Housing Affordability"
+pageRef = "/committees/housing"
+weight = 30
+
+[[menus.committees]]
+name = "Planning"
+pageRef = "/committees/planning"
+weight = 40
+
+[[menus.committees]]
+name = "Transportation"
+pageRef = "/committees/transportation"
+weight = 50
+
+[[menus.committees]]
+name = "Trees and Greenspace and Sustainability"
+pageRef = "/committees/trees"
+weight = 60
+
+[[menus.getinvolved]]
+name = "Get Involved"
+pageRef = "/get-involved"
+weight = 10
+
+[[menus.getinvolved]]
+name = "Become a Member"
+pageRef = "/membership"
+weight = 20
+
+[[menus.getinvolved]]
+name = "Volunteer"
+pageRef = "/volunteer"
+weight = 30
+
+[[menus.getinvolved]]
+name = "Sponsorship"
+pageRef = "/sponsorship"
+weight = 40
+
+[[menus.getinvolved]]
+name = "Donate"
+pageRef = "/donate"
+weight = 50
+
+[markup]
+[markup.goldmark.renderer]
+unsafe = true
+
+[params.footer]
+  tagline = "Working for and with everyone who lives, works and plays in Centretown."
+
+[build]
+  writeStats = false
+
+[services]
+[services.rss]
+  limit = 20
+
+

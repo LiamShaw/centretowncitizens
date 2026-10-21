@@ -1,0 +1,19 @@
+{{ define "main" }}
+<div class="wrap page-wrap">
+  <article class="prose event">
+    <p class="event-when">
+      <time datetime="{{ .Params.start }}">{{ time.Format "Monday, January 2, 2006" (time .Params.start) }}</time>
+      {{ with .Params.end }} &ndash; {{ time.Format "3:04 PM" (time .) }}{{ end }}
+      {{ with .Params.location }} &middot; {{ . }}{{ end }}
+    </p>
+    {{ with .Params.image }}
+    <img class="event-image" src="{{ . | relURL }}" alt="{{ $.Title }}">
+    {{ end }}
+    <h1>{{ .Title }}</h1>
+    {{ .Content }}
+    {{ if .Params.legacy_url }}
+    <p class="event-legacy"><small>Originally published at <code>{{ .Params.legacy_url }}</code></small></p>
+    {{ end }}
+  </article>
+</div>
+{{ end }}

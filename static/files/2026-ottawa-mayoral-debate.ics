@@ -1,0 +1,16 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Claude//2026 Ottawa Mayoral Debate//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:2026-ottawa-mayoral-debate-20261015@claude
+DTSTAMP:20260819T000000Z
+DTSTART;TZID=America/Toronto:20261015T190000
+DTEND;TZID=America/Toronto:20261015T210000
+SUMMARY:2026 Ottawa Mayoral Debate
+LOCATION:120 Lisgar Street\, Ottawa\, Ontario
+DESCRIPTION:Website: https://www.centretowncitizens.ca/events/mayoraldebate2026
+URL:https://www.centretowncitizens.ca/events/mayoraldebate2026
+END:VEVENT
+END:VCALENDAR

@@ -1,0 +1,16 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Claude//Housing Affordability Working Group Meeting//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:housing-affordability-working-group-20260825@claude
+DTSTAMP:20260819T000000Z
+DTSTART;TZID=America/Toronto:20260825T183000
+DTEND;TZID=America/Toronto:20260825T200000
+SUMMARY:Housing Affordability Working Group Meeting
+LOCATION:Zoom
+DESCRIPTION:Website: https://www.centretowncitizens.ca/events/housing-affordability-working-group
+URL:https://www.centretowncitizens.ca/events/housing-affordability-working-group
+END:VEVENT
+END:VCALENDAR

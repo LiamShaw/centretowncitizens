@@ -1,0 +1,17 @@
+{{/*
+  Renders a list of categories as tags.
+
+  The categories field can be a list or a single value, depending on how the
+  content was written. The content editor's committee box writes a list, but
+  hand-edited content may hold a single string, and a single string would
+  break a range. This partial normalises both shapes.
+
+  Usage: {{ partial "tags.html" .Params.categories }}
+*/}}
+{{- $cats := . -}}
+{{- if $cats -}}
+  {{- if not (reflect.IsSlice $cats) -}}
+    {{- $cats = slice $cats -}}
+  {{- end -}}
+  <p class="card-tags">{{ range $cats }}<span class="tag">{{ . }}</span>{{ end }}</p>
+{{- end -}}

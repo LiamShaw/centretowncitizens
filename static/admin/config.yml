@@ -1,0 +1,97 @@
+# Sveltia CMS configuration for the Centretown CCA site.
+#
+# Sveltia is the maintained successor to Decap CMS. It gives board members a
+# web form for editing content, and commits each edit to the Git repository,
+# which triggers a Cloudflare Pages rebuild.
+#
+# The backend is GitHub. Set `repo` to the association's organisation and
+# repository before going live, and deploy the Sveltia CMS Authenticator as a
+# Cloudflare Worker so that members sign in with GitHub rather than pasting a
+# personal access token. See the runbook in docs/Cutover Runbook.md.
+
+yaml-language-server: $schema=https://unpkg.com/@sveltia/cms/schema/sveltia-cms.json
+
+backend:
+  name: github
+  repo: centretown-cca/website
+  branch: main
+  # base_url: https://sveltia-cms-auth.YOUR-SUBDOMAIN.workers.dev
+
+media_folder: static/images/uploads
+public_folder: /images/uploads
+
+site_url: https://www.centretowncitizens.ca
+logo_url: /images/CCALogo_EN_FullName_Colour-1619899849350.png
+
+collections:
+  - name: news
+    label: News
+    folder: content/news
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { name: title, label: Title }
+      - { name: date, label: Date, widget: datetime }
+      - { name: author, label: Author, required: false }
+      - { name: description, label: Summary, widget: text, required: false }
+      - { name: body, label: Body, widget: markdown }
+
+  - name: advocacy
+    label: Advocacy
+    folder: content/advocacy
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { name: title, label: Title }
+      - { name: date, label: Date, widget: datetime }
+      - { name: author, label: Author, required: false }
+      - { name: description, label: Summary, widget: text, required: false }
+      - name: categories
+        label: Committee
+        widget: select
+        multiple: true
+        options:
+          - CCA
+          - SEPAW
+          - Planning
+          - Transportation
+          - Greenspace & Sustainability
+          - Housing Affordability
+      - { name: body, label: Body, widget: markdown }
+
+  - name: events
+    label: Events
+    folder: content/events
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { name: title, label: Title }
+      - { name: start, label: Starts, widget: datetime }
+      - { name: end, label: Ends, widget: datetime, required: false }
+      - { name: location, label: Location, required: false }
+      - { name: image, label: Image, widget: image, required: false }
+      - { name: description, label: Summary, widget: text, required: false }
+      - { name: body, label: Description, widget: markdown }
+
+  - name: committees
+    label: Committees
+    folder: content/committees
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { name: title, label: Title }
+      - { name: date, label: Date, widget: datetime }
+      - { name: author, label: Author, required: false }
+      - { name: description, label: Summary, widget: text, required: false }
+      - { name: body, label: Body, widget: markdown }
+
+  - name: pages
+    label: Pages
+    folder: content
+    include: "*.md"
+    exclude: ["_index.md", "**/_index.md"]
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { name: title, label: Title }
+      - { name: body, label: Body, widget: markdown }

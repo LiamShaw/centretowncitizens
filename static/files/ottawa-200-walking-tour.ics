@@ -1,0 +1,16 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Centretown Citizens Community Association//Ottawa 200 Walking Tour//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:ottawa-200-walking-tour-20260808@centretowncitizens.ca
+DTSTAMP:20260727T120000Z
+DTSTART;TZID=America/Toronto:20260808T103000
+DTEND;TZID=America/Toronto:20260808T120000
+SUMMARY:Ottawa 200 Walking Tour
+LOCATION:Colonel John By Statue
+URL:https://www.centretowncitizens.ca/events/ottawa-200-tour
+DESCRIPTION:Ottawa 200 Walking Tour
+END:VEVENT
+END:VCALENDAR
