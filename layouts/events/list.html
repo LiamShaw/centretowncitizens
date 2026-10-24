@@ -5,7 +5,6 @@
 {{ $past := where $pages "Date" "lt" $now }}
 
 <div class="wrap page-wrap">
-  <h1>{{ .Title }}</h1>
   {{ if .Content }}<article class="prose">{{ .Content }}</article>{{ end }}
 
   {{ if $upcoming }}

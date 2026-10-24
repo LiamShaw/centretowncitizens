@@ -6,7 +6,6 @@
       {{ with .Params.author }} &middot; {{ . }}{{ end }}
       {{ with .Params.categories }} &middot; {{ range . }}<span class="tag">{{ . }}</span> {{ end }}{{ end }}
     </p>
-    <h1>{{ .Title }}</h1>
     {{ .Content }}
     {{ if .Params.legacy_url }}
     <p class="post-legacy"><small>Originally published at <code>{{ .Params.legacy_url }}</code></small></p>

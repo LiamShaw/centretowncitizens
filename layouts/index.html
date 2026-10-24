@@ -2,9 +2,9 @@
 {{ if .IsHome }}
 <div class="hero">
   <div class="wrap hero-inner">
-    <h1>{{ site.Title }}</h1>
-    <p class="hero-tagline">{{ site.Params.description }}</p>
-    <p><a class="button" href="{{ "/get-involved/" | relURL }}">Join the Community</a></p>
+    <p class="hero-kicker">{{ site.Title }}</p>
+    <h1>{{ site.Params.description }}</h1>
+    <p><a class="hero-link" href="{{ "/get-involved/" | relURL }}">Join the Community</a></p>
   </div>
 </div>
 
@@ -51,7 +51,6 @@
 
 {{ else }}
 <div class="wrap page-wrap">
-  <h1>{{ .Title }}</h1>
   {{ if .Content }}<article class="prose">{{ .Content }}</article>{{ end }}
   {{ $pages := .RegularPages }}
   {{ if $pages }}

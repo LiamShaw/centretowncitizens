@@ -64,6 +64,7 @@ weight = 40
 
 [[menus.main]]
 name = "Committees"
+identifier = "committees"
 pageRef = "/committees"
 weight = 50
 
@@ -78,19 +79,10 @@ pageRef = "/get-involved"
 weight = 70
 
 [[menus.main]]
-name = "About CCA"
+name = "About"
+identifier = "about"
 pageRef = "/about"
 weight = 80
-
-[[menus.main]]
-name = "Board Members"
-pageRef = "/board"
-weight = 90
-
-[[menus.main]]
-name = "Editorial Guidelines"
-pageRef = "/editorial"
-weight = 100
 
 [[menus.main]]
 name = "Contact"
@@ -123,9 +115,36 @@ pageRef = "/committees/transportation"
 weight = 50
 
 [[menus.committees]]
+name = "Safety, Emergency Preparedness and Wellness"
+pageRef = "/committees/sepaw"
+weight = 55
+
+[[menus.committees]]
 name = "Trees and Greenspace and Sustainability"
 pageRef = "/committees/trees"
 weight = 60
+
+[[menus.committees]]
+name = "Seniors"
+pageRef = "/committees/seniors"
+weight = 70
+
+# The children of the About folder. The live site keeps Board Members and
+# Editorial Guidelines here rather than in the top row.
+[[menus.about]]
+name = "About CCA"
+pageRef = "/about"
+weight = 10
+
+[[menus.about]]
+name = "Board Members"
+pageRef = "/board"
+weight = 20
+
+[[menus.about]]
+name = "Editorial Guidelines"
+pageRef = "/editorial"
+weight = 30
 
 [[menus.getinvolved]]
 name = "Get Involved"

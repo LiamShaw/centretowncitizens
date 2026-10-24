@@ -93,67 +93,172 @@ img {
   left: 0;
 }
 
-/* Header */
-
+/* Header. The live site runs one row on the navy field: logo left, the menu,
+   then social links and a black Donate action. On the home page the header sits
+   over the hero photograph and carries no background of its own. */
 .site-header {
-  border-bottom: 1px solid var(--rule);
-  background: var(--paper);
-  position: sticky;
-  top: 0;
+  background: var(--ink);
+  color: #ffffff;
+  position: relative;
   z-index: 50;
 }
 
+.site-header--overlay {
+  position: absolute;
+  inset: 0 0 auto 0;
+  background: transparent;
+}
+
 .header-inner {
+  width: min(100% - 2.5rem, 82rem);
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 1.5rem;
-  padding: 0.75rem 0;
-  flex-wrap: wrap;
+  gap: 1.9rem;
+  padding: 0.85rem 0;
+}
+
+.brand {
+  flex: 0 0 auto;
+  display: block;
 }
 
 .brand img {
   display: block;
-  max-height: 3.25rem;
+  height: 4.6rem;
   width: auto;
 }
 
-.primary-nav ul {
+.primary-nav {
+  flex: 1 1 auto;
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.25rem 1.1rem;
+  align-items: center;
+  margin-left: 0;
+}
+
+.primary-nav > ul {
+  display: flex;
+  align-items: center;
+  gap: 1.65rem;
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
 .primary-nav a {
-  text-decoration: none;
-  color: var(--ink);
-  font-size: 0.95rem;
-  padding: 0.25rem 0;
   display: inline-block;
-  border-bottom: 2px solid transparent;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 1rem;
+  padding: 0.2rem 0;
+  border-bottom: 1px solid transparent;
+  white-space: nowrap;
 }
 
 .primary-nav a:hover,
-.primary-nav a:focus,
-.primary-nav a[aria-current="page"] {
-  color: var(--accent);
+.primary-nav a:focus {
   border-bottom-color: var(--accent);
+}
+
+.primary-nav a[aria-current="page"] {
+  border-bottom-color: #ffffff;
+}
+
+/* The second tier is a folder, as on the live site: children appear under their
+   parent on hover or keyboard focus, not in a permanent bar. */
+.nav-item {
+  position: relative;
+}
+
+.nav-item > .dropdown {
+  position: absolute;
+  top: calc(100% + 0.75rem);
+  left: -1.15rem;
+  min-width: 15rem;
+  margin: 0;
+  padding: 0.4rem 0;
+  list-style: none;
+  background: #ffffff;
+  border: 1px solid var(--rule);
+  box-shadow: 0 14px 30px rgba(11, 36, 62, 0.18);
+  display: none;
+}
+
+.nav-item:hover > .dropdown,
+.nav-item:focus-within > .dropdown {
+  display: block;
+}
+
+.dropdown a {
+  display: block;
+  padding: 0.45rem 1.25rem;
+  color: var(--ink);
+  font-size: 0.9rem;
+  border-bottom: 0;
+  white-space: nowrap;
+}
+
+.dropdown a:hover,
+.dropdown a:focus {
+  background: var(--paper-soft);
+  color: #2f6b16;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  margin-left: auto;
+  padding-left: 1.5rem;
+  flex: 0 0 auto;
+}
+
+.header-actions .social {
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  opacity: 0.85;
+}
+
+.header-actions .social:hover,
+.header-actions .social:focus {
+  opacity: 1;
+}
+
+.header-actions .social svg {
+  width: 17px;
+  height: 17px;
+  fill: currentColor;
+}
+
+.button-donate {
+  display: inline-block;
+  background: #000000;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 0.92rem;
+  font-weight: 600;
+  padding: 0.8rem 1.8rem;
+  border-radius: 0;
+}
+
+.button-donate:hover,
+.button-donate:focus {
+  background: #1c1c1c;
+  color: #ffffff;
 }
 
 .nav-toggle {
   display: none;
   align-items: center;
   gap: 0.5rem;
+  margin-left: auto;
   background: none;
-  border: 1px solid var(--rule);
+  border: 1px solid rgba(255, 255, 255, 0.55);
   border-radius: 4px;
-  color: var(--ink);
+  color: #ffffff;
   cursor: pointer;
   font: inherit;
-  padding: 0.5rem 0.75rem;
+  padding: 0.45rem 0.7rem;
 }
 
 .nav-toggle-bars,
@@ -180,7 +285,41 @@ img {
   top: 6px;
 }
 
-@media (max-width: 60rem) {
+/* The page title sits in a navy band under the header, as it does on the live
+   site, so the header and the title read as one field. */
+.page-banner {
+  background: var(--ink);
+  color: #ffffff;
+  padding: 1.4rem 0 3.2rem;
+}
+
+.page-banner h1 {
+  margin: 0;
+  text-align: center;
+  color: #ffffff;
+  font-size: clamp(1.8rem, 3.4vw, 2.6rem);
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+/* Wide screens have spare width in the row, so the menu takes the size the live
+   site shows there. */
+@media (min-width: 84rem) {
+  .primary-nav a {
+    font-size: 1.06rem;
+  }
+
+  .primary-nav > ul {
+    gap: 1.9rem;
+  }
+}
+
+@media (max-width: 74rem) {
+  .header-inner {
+    flex-wrap: wrap;
+    padding: 0.75rem 0;
+  }
+
   .nav-toggle {
     display: inline-flex;
   }
@@ -188,22 +327,72 @@ img {
   .primary-nav {
     display: none;
     flex-basis: 100%;
+    order: 3;
+    margin-left: 0;
   }
 
   .primary-nav.is-open {
     display: block;
+    background: var(--ink);
+    margin-inline: -1.25rem;
+    padding-inline: 1.25rem;
+    box-shadow: 0 18px 30px rgba(11, 36, 62, 0.28);
   }
 
-  .primary-nav ul {
+  /* In the drawer the actions follow the menu rather than sitting on a second row
+     under the logo, which is what the live site does. */
+  .primary-nav .header-actions {
+    margin-left: 0;
+    padding: 0.9rem 0 1.2rem;
+  }
+
+  .primary-nav > ul {
     flex-direction: column;
+    align-items: stretch;
     gap: 0;
-    padding-bottom: 0.75rem;
+    padding: 0.25rem 0 0.75rem;
   }
 
   .primary-nav a {
     display: block;
-    padding: 0.55rem 0;
-    border-bottom: 1px solid var(--rule);
+    padding: 0.6rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+  }
+
+  /* On a narrow screen the folder opens in place rather than floating over the
+     page, which is what a touch user expects. */
+  .nav-item > .dropdown {
+    position: static;
+    display: block;
+    min-width: 0;
+    border: 0;
+    box-shadow: none;
+    background: transparent;
+    padding: 0 0 0.4rem 0.9rem;
+  }
+
+  .dropdown a {
+    color: #d7e1ec;
+    font-size: 0.88rem;
+    padding: 0.4rem 0;
+  }
+
+  .dropdown a:hover,
+  .dropdown a:focus {
+    background: transparent;
+    color: #ffffff;
+  }
+
+  .header-actions {
+    margin-left: auto;
+  }
+
+  .button-donate {
+    padding: 0.6rem 1.2rem;
+  }
+
+  .page-banner {
+    padding: 1rem 0 2.4rem;
   }
 }
 
@@ -212,6 +401,7 @@ img {
 .hero {
   background-color: var(--ink);
   background-image:
+    linear-gradient(180deg, rgba(11, 36, 62, 0.7) 0%, rgba(11, 36, 62, 0) 240px),
     linear-gradient(90deg, rgba(11, 36, 62, 0.92) 0%, rgba(11, 36, 62, 0.72) 55%, rgba(11, 36, 62, 0.45) 100%),
     url("/images/hero.jpg");
   background-size: cover;
@@ -220,23 +410,37 @@ img {
   color: #ffffff;
 }
 
+.hero-inner {
+  /* Room for the header, which sits over the photograph on this page. */
+  padding: 11rem 0 5rem;
+}
+
+.hero-kicker {
+  margin: 0 0 0.6rem;
+  font-size: 0.95rem;
+  color: #d7e1ec;
+}
+
 .hero h1 {
   color: #ffffff;
+  font-size: clamp(2rem, 4.2vw, 3.25rem);
+  line-height: 1.14;
+  font-weight: 600;
+  max-width: 46rem;
+  margin: 0 0 1.7rem;
 }
 
-.hero-tagline {
-  color: #dfe7ef;
-}
-
-.hero-inner {
-  padding: 3.5rem 0 3rem;
-}
-
-.hero-tagline {
+.hero .hero-link {
+  color: var(--accent);
   font-size: 1.15rem;
-  color: var(--ink-soft);
-  max-width: 38rem;
-  margin: 0 0 1.5rem;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.3rem;
+}
+
+.hero .hero-link:hover,
+.hero .hero-link:focus {
+  color: #ffffff;
 }
 
 .button {
@@ -490,17 +694,6 @@ code {
 .filter-chip.is-active,
 .filter-chip:hover { background: var(--accent-dark); border-color: var(--accent-dark); color: #ffffff; }
 .tag { color: #2f6b16; }
-
-/* Hero text needs to outrank the earlier .hero-tagline rule. */
-.hero .hero-tagline {
-  color: #e6edf3;
-  font-size: 1.2rem;
-  max-width: 34rem;
-}
-
-.hero .button {
-  margin-top: 0.25rem;
-}
 
 /* Lime is an action colour for dark grounds. As text on white it fails contrast,
    so body links take a darkened green and cards keep navy titles. */
