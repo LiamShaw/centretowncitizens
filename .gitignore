@@ -29,3 +29,7 @@ archetypes/
 # Unused.
 scripts/
 
+
+# Local build tool: a downloaded Hugo binary, not source.
+.tools/
+

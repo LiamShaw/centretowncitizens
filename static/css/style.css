@@ -524,3 +524,11 @@ a:focus {
 .card h3 a:focus {
   color: #2f6b16;
 }
+
+/* White on lime fails contrast. The action button carries navy text on green. */
+.button,
+.hero .button,
+.hero .button:hover,
+.hero .button:focus {
+  color: var(--ink);
+}
