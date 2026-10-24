@@ -1,12 +1,12 @@
 :root {
-  --ink: #102038;
-  --ink-soft: #3c4a61;
+  --ink: #0b243e;
+  --ink-soft: #44505f;
   --paper: #ffffff;
-  --paper-soft: #f5f7fa;
-  --rule: #d9e0ea;
-  --accent: #1f5c8b;
-  --accent-dark: #163f5e;
-  --tag: #eef3f8;
+  --paper-soft: #f4f5f5;
+  --rule: #dfe3e1;
+  --accent: #6cd943;
+  --accent-dark: #4fae2e;
+  --tag: #eaf7dd;
   --measure: 42rem;
 }
 
@@ -210,8 +210,22 @@ img {
 /* Hero */
 
 .hero {
-  background: var(--paper-soft);
+  background-color: var(--ink);
+  background-image:
+    linear-gradient(90deg, rgba(11, 36, 62, 0.92) 0%, rgba(11, 36, 62, 0.72) 55%, rgba(11, 36, 62, 0.45) 100%),
+    url("/images/hero.jpg");
+  background-size: cover;
+  background-position: center;
   border-bottom: 1px solid var(--rule);
+  color: #ffffff;
+}
+
+.hero h1 {
+  color: #ffffff;
+}
+
+.hero-tagline {
+  color: #dfe7ef;
 }
 
 .hero-inner {
@@ -228,17 +242,18 @@ img {
 .button {
   display: inline-block;
   background: var(--accent);
+  color: var(--ink);
   color: #fff;
   text-decoration: none;
   padding: 0.7rem 1.4rem;
   border-radius: 4px;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .button:hover,
 .button:focus {
   background: var(--accent-dark);
-  color: #fff;
+  color: var(--ink);
 }
 
 /* Sections */
@@ -466,4 +481,46 @@ code {
   padding: 0.55rem 1.1rem;
   font: inherit;
   cursor: pointer;
+}
+
+/* Brand alignment, 24 October 2026: green reads as an action colour, so on white
+   it appears as a rule or a tag field, never as small text. */
+.hero a:not(.button) { color: #a8e86f; }
+.site-footer a { color: #cfe0d0; }
+.filter-chip.is-active,
+.filter-chip:hover { background: var(--accent-dark); border-color: var(--accent-dark); color: #ffffff; }
+.tag { color: #2f6b16; }
+
+/* Hero text needs to outrank the earlier .hero-tagline rule. */
+.hero .hero-tagline {
+  color: #e6edf3;
+  font-size: 1.2rem;
+  max-width: 34rem;
+}
+
+.hero .button {
+  margin-top: 0.25rem;
+}
+
+/* Lime is an action colour for dark grounds. As text on white it fails contrast,
+   so body links take a darkened green and cards keep navy titles. */
+a {
+  color: #2f6b16;
+}
+
+a:hover,
+a:focus {
+  color: #0b243e;
+}
+
+.card h2 a,
+.card h3 a {
+  color: var(--ink);
+}
+
+.card h2 a:hover,
+.card h3 a:hover,
+.card h2 a:focus,
+.card h3 a:focus {
+  color: #2f6b16;
 }
