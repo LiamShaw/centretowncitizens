@@ -165,6 +165,7 @@ img {
 .primary-nav a:hover,
 .primary-nav a:focus {
   border-bottom-color: var(--accent);
+  color: var(--accent);
 }
 
 .primary-nav a[aria-current="page"] {
