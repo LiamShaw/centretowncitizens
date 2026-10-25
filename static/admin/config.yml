@@ -13,7 +13,7 @@ yaml-language-server: $schema=https://unpkg.com/@sveltia/cms/schema/sveltia-cms.
 
 backend:
   name: github
-  repo: centretown-cca/website
+  repo: LiamShaw/centretowncitizens
   branch: main
   # base_url: https://sveltia-cms-auth.YOUR-SUBDOMAIN.workers.dev
 
