@@ -412,7 +412,7 @@ img {
   background-image:
     linear-gradient(180deg, rgba(11, 36, 62, 0.7) 0%, rgba(11, 36, 62, 0) 240px),
     linear-gradient(90deg, rgba(11, 36, 62, 0.92) 0%, rgba(11, 36, 62, 0.72) 55%, rgba(11, 36, 62, 0.45) 100%),
-    url("/images/hero.jpg");
+    url("/centretowncitizens/images/hero.jpg");
   background-size: cover;
   background-position: center;
   border-bottom: 1px solid var(--rule);

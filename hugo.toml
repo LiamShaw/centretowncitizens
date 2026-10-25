@@ -1,4 +1,5 @@
 baseURL = "https://liamshaw.github.io/centretowncitizens/"
+canonifyURLs = true
 languageCode = "en-CA"
 title = "Centretown Community Association"
 enableGitInfo = false

@@ -1,0 +1,5 @@
+{{- $dest := .Destination -}}
+{{- if hasPrefix $dest "/" -}}
+  {{- $dest = printf "%s%s" (site.BaseURL | replaceRE "/$" "") (replaceRE "^/" "/" $dest) -}}
+{{- end -}}
+<img src="{{ $dest | safeURL }}" alt="{{ .Text }}"{{ with .Title }} title="{{ . }}"{{ end }}>
