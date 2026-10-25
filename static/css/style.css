@@ -1,11 +1,13 @@
 :root {
-  --ink: #0b243e;
+  --ink: #102038;
   --ink-soft: #44505f;
   --paper: #ffffff;
   --paper-soft: #f4f5f5;
   --rule: #dfe3e1;
   --accent: #6cd943;
   --accent-dark: #4fae2e;
+  --accent-text: #2f6b16;
+  --blue: #2650b7;
   --tag: #eaf7dd;
   --measure: 42rem;
 }
@@ -24,9 +26,10 @@ body {
   margin: 0;
   background: var(--paper);
   color: var(--ink);
-  font-family: "Poppins", "Segoe UI", system-ui, -apple-system, sans-serif;
+  font-family: "Outfit", "Segoe UI", system-ui, -apple-system, sans-serif;
   font-size: 1rem;
   line-height: 1.65;
+  font-optical-sizing: auto;
 }
 
 .wrap {
@@ -35,12 +38,12 @@ body {
 }
 
 a {
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 a:hover,
 a:focus {
-  color: var(--accent-dark);
+  color: var(--blue);
 }
 
 h1,
@@ -48,18 +51,23 @@ h2,
 h3 {
   line-height: 1.25;
   margin: 0 0 0.5em;
+  font-weight: 700;
+  font-variation-settings: "wght" 700;
 }
 
 h1 {
   font-size: clamp(1.9rem, 1.4rem + 2vw, 2.8rem);
+  font-weight: 800;
 }
 
 h2 {
   font-size: clamp(1.4rem, 1.2rem + 1vw, 1.9rem);
+  font-weight: 700;
 }
 
 h3 {
   font-size: 1.2rem;
+  font-weight: 600;
 }
 
 img {
@@ -200,7 +208,7 @@ img {
 .dropdown a:hover,
 .dropdown a:focus {
   background: var(--paper-soft);
-  color: #2f6b16;
+  color: var(--accent-text);
 }
 
 .header-actions {
@@ -693,17 +701,17 @@ code {
 .site-footer a { color: #cfe0d0; }
 .filter-chip.is-active,
 .filter-chip:hover { background: var(--accent-dark); border-color: var(--accent-dark); color: #ffffff; }
-.tag { color: #2f6b16; }
+.tag { color: var(--accent-text); }
 
 /* Lime is an action colour for dark grounds. As text on white it fails contrast,
    so body links take a darkened green and cards keep navy titles. */
 a {
-  color: #2f6b16;
+  color: var(--accent-text);
 }
 
 a:hover,
 a:focus {
-  color: #0b243e;
+  color: var(--blue);
 }
 
 .card h2 a,
@@ -715,7 +723,7 @@ a:focus {
 .card h3 a:hover,
 .card h2 a:focus,
 .card h3 a:focus {
-  color: #2f6b16;
+  color: var(--accent-text);
 }
 
 /* White on lime fails contrast. The action button carries navy text on green. */

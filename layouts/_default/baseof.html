@@ -6,7 +6,10 @@
   <title>{{ if .IsHome }}{{ site.Title }}{{ else }}{{ .Title }} | {{ site.Title }}{{ end }}</title>
   <meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ site.Params.description }}{{ end }}">
   <link rel="canonical" href="{{ .Permalink }}">
-  {{ with .Params.legacy_url }}<meta name="legacy-url" content="{{ replace . " " "%20" }}">{{ end }}  <link rel="stylesheet" href="{{ "css/style.css" | relURL }}">
+  {{ with .Params.legacy_url }}<meta name="legacy-url" content="{{ replace . " " "%20" }}">{{ end }}  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ "css/style.css" | relURL }}">
   <link rel="icon" href="{{ "images/favicon.ico" | relURL }}" type="image/x-icon">
   {{ with .OutputFormats.Get "rss" }}<link rel="alternate" type="application/rss+xml" href="{{ .Permalink }}" title="{{ site.Title }}">{{ end }}
 </head>
